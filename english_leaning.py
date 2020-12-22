@@ -10,6 +10,7 @@ import plain_db
 from bs4 import BeautifulSoup
 import cached_url
 import export_to_telegraph
+import os
 
 with open('token') as f:
 	bot = Updater(f.read().strip(), use_context=True).bot
@@ -39,8 +40,8 @@ def run():
 		if not file:
 			continue
 		cached_url.get(file, mode='b', force_cache=True)
-		group = [InputMediaAudio(open(
-			cached_url.getFilePath(file), 'rb'), caption=result)]
+		filename = cached_url.getFilePath(file)
+		group = [InputMediaAudio(open(filename, 'rb'), caption=result)]
 		bot.send_media_group(channel_en.id, group, timeout = 20*60)
 		existing.add(link)
 		return
